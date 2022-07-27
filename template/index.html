@@ -1,0 +1,152 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>Rebate Revenue Model</title> 
+        
+        <style>
+            /* Incorporating CSS Styling in HTML file for convenience */
+            .django_header {
+                background-color: #002855; 
+            }
+
+            a {
+                color: white;
+            }
+
+            h1 {
+                font-family: 'IBM Plex Sans', sans-serif;
+            }
+
+            .main-heading {
+                text-align: center;
+            }
+
+            .computed-heading {
+                font-family: 'IBM Plex Sans', sans-serif;
+                text-decoration: underline;
+            }
+
+            .btn_header {
+                border: none;
+                border-radius: 7px;
+                background-color: #08a3e2;
+                font-family: 'IBM Plex Sans', sans-serif;
+            }
+
+            .btn_header:hover {
+                filter: brightness(70%);
+            }
+
+
+            .hover-underline-animation {
+                display: inline-block;
+                position: relative;
+                color: #08a3e2;
+            }
+
+            .hover-underline-animation:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                transform: scaleX(0);
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background-color: #08a3e2;
+                transform-origin: bottom right;
+                transition: transform 0.25s ease-out;
+            }
+
+            .hover-underline-animation:hover:after {
+                transform: scaleX(1);
+                transform-origin: bottom left;
+            }
+        
+
+            .leftside, .rightside {
+                height: 100vh;
+                width: 100%;
+            }
+
+            .border { border-width: 25px; border-color: black; border-style: solid; }
+        </style>
+
+        <!-- Bootstrap CDN for .css -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+        <!-- Google Fonts API import -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body style="background-color: #cee8f0;">
+        <header class = "django_header py-4 px-3 navbar navbar-expand-md">
+            <img height="60px" class="float-start" alt="PROS Logo" src = "{% static 'PROS_Guidance_Logo2.png' %}" alt = "PROS pic">
+            <nav class = "d-inline-flex mt-2 mt-md-0 ms-md-auto justify-content-center align-items-center">
+                <ul class = "navbar-nav mr-auto">
+                    <li class = "nav-item px-4">
+                        <a class = "nav-link hover-underline-animation" style = "color: white; font-size: 20px;" href = "#">
+                            HOME
+                        </a>
+                    </li>
+                    <li class = "nav-item px-4" style = "">
+                        <a class = "nav-link hover-underline-animation" style = "color: white; font-size: 20px;" href = "#">
+                            ABOUT
+                        </a>
+                    </li>
+                    <li class = "nav-item px-5" style = "padding: 10px;">
+                        <input type="text" size="20" id="myInput" placeholder="Search">
+                    </li>
+                    <li class = " btn_header nav-item px-3 ml-5">
+                        <a class = "nav-link" style = "color: white; font-size: 21px; font-weight: bolder;" href = "#">
+                            ☎️ Talk to PROS
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <h1 class = "pt-2 main-heading" style = "font-weight: 700; text-decoration: underline;">Discount & Rebate Revenue Prediction</h1>
+
+        <br>
+        <div class = "row">
+        <div class = "col">
+            <div class = "leftside">
+            <form class = "px-5" method = "post" enctype="multipart/form-data" action="predictRebateRevenue">
+                {% csrf_token %}
+                <div class = "col"><label style = "font-family: 'IBM Plex Sans', sans-serif; font-size: 20px;" for = "fname">Quantity:</label></div>
+                <input name = "quantityVal" type = "text" > <br><br>
+        
+                <div class = "col"><label style = "font-family: 'IBM Plex Sans', sans-serif; font-size: 20px;" for = "fname">Desired Revenue:</label></div>
+                <input name = "desired_revVal" type = "text"> <br><br>
+        
+                <div class = "col"><label style = "font-family: 'IBM Plex Sans', sans-serif; font-size: 20px;" for = "fname">List Price:</label></div>
+                <input name = "list_priceVal" type = "text"> <br><br>
+                <br>
+                <input type = "submit" value = "Submit">
+                </form>
+            
+                <br>
+        
+                <div class = "pt-5" style = "margin-left: 15px;">
+                <h1 style = "color: #000080;">Computed Discount:</h1><h2 style = "color: #404040">{{s_v}}</h2> 
+                <h1 style = "color: #000080">Computed Rebate:</h1><h2 style = "color: #404040">{{s_v_r}}</h2> 
+        </div>
+        </div>
+        </div>
+        <!-- <h1>Computed Sales Price is: {{s_v_sp}}</h1> --> 
+
+        <div class = "col">
+            <div class = "rightside">
+            <div style = "margin-top: 50px; margin-right: 100px;" class = "col"><img height="600" class="float-start border" alt="AI Visual Representation" src = "{% static 'Figure.png' %}"></div>
+        </div>
+        </div>
+        </div>
+
+        <!-- Boostrap CDN for .js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    </body>
+</html>
